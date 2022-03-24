@@ -5,6 +5,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cos.security1.model.User;
 import com.cos.security1.repository.UserRepository;
@@ -28,7 +30,7 @@ public class IndexController {
 	}
 	
 	@GetMapping("/user")
-	public String user() {
+	public @ResponseBody String user() {
 		return "user";
 	}
 	
