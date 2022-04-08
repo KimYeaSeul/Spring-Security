@@ -9,9 +9,12 @@ import javax.persistence.Id;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor
 @Data
 public class User {
 
@@ -26,9 +29,23 @@ public class User {
 	
 	private String email;
 	
-	private String role;
+	private String role; // ROLE_USER, ROLE_ADMIN
+	private String provider; // google
+	private String providerId; // super.loadUser(userRequest).getAttributes()의 sub
 	
 	@CreationTimestamp
 	private Timestamp createDate;
-	
+
+	@Builder
+	public User(int id, String username, String password, String email, String role, String provider, String providerId,
+			Timestamp createDate) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.role = role;
+		this.provider = provider;
+		this.providerId = providerId;
+		this.createDate = createDate;
+	}
 }
