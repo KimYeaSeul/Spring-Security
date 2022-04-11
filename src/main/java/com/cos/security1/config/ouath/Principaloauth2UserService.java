@@ -1,5 +1,7 @@
 package com.cos.security1.config.ouath;
 
+import java.util.Map;
+
 import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.cos.security1.auth.PrincipalDetails;
 import com.cos.security1.auth.provider.FacebookUserInfo;
 import com.cos.security1.auth.provider.GoogleUserInfo;
+import com.cos.security1.auth.provider.NaverUserInfo;
 import com.cos.security1.auth.provider.OAuth2UserInfo;
 import com.cos.security1.model.User;
 import com.cos.security1.repository.UserRepository;
@@ -48,8 +51,11 @@ public class Principaloauth2UserService extends DefaultOAuth2UserService{
 		}else if(userRequest.getClientRegistration().getRegistrationId().equals("facebook")) {
 			System.out.println("페이스북요청.");
 			oAuth2UserInfo = new FacebookUserInfo(oauth2User.getAttributes());
+		}else if(userRequest.getClientRegistration().getRegistrationId().equals("naver")) {
+			System.out.println("네이버요청.");
+			oAuth2UserInfo = new NaverUserInfo((Map)oauth2User.getAttributes().get("response"));
 		}else {
-			System.out.println("구글과 페이스북만 지원함.");
+			System.out.println("구글과 페이스북과 네이버만 지원함.");
 		}
 		// getAttrubute 정보를 토대로 회원가입 진행.
 //		String provider = userRequest.getClientRegistration().getRegistrationId(); //google, facebook
@@ -65,7 +71,7 @@ public class Principaloauth2UserService extends DefaultOAuth2UserService{
 		User userEntity = userRepository.findByUsername(username);
 		
 		if(userEntity == null) {
-			System.out.println("최초 로그인 회원가입 진행");
+			System.out.println("최초 OAuth 로그인 회원가입 진행");
 			userEntity = User.builder().username(username) 
 					.password(password)
 					.email(email)
